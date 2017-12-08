@@ -18,7 +18,7 @@ OPERATIONS = [Rotate, FlipH, FlipV, Translate, Noise, Zoom, Blur]
 '''
 Augmented files will have names matching the regex below, eg
 
-    original__rot90__crop1__flipv.jpg
+    original_rot90_crop1_flipv.jpg
 
 '''
 AUGMENTED_FILE_REGEX = re.compile('^.*(__.+)+\\.[^\\.]+$')
@@ -27,12 +27,16 @@ EXTENSION_REGEX = re.compile('|'.join(map(lambda n : '.*\\.' + n + '$', EXTENSIO
 thread_pool = None
 counter = None
 
+output_folder = '/output'
+if output_folder[-1] != '/':
+    output_folder = output_folder + "/"
+
 def build_augmented_file_name(original_name, ops):
     root, ext = os.path.splitext(original_name)
-    result = root
+    result = root.split('/')[-1]
     for op in ops:
-        result += '__' + op.code
-    return result + ext
+        result += '_' + op.code
+    return output_folder + result + ext
 
 def work(d, f, op_lists):
     try:
